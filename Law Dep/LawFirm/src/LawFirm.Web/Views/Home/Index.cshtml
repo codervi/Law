@@ -1,0 +1,59 @@
+@model HomeVm
+@{
+    ViewData["Title"] = null;
+}
+
+<section class="hero wrap">
+    <div class="hero-copy">
+        <h1>Clear advice for complicated matters.</h1>
+        <p class="lead">We are a small firm of six practice areas and four attorneys. You will always know who is working on your matter and what happens next.</p>
+        <p><a class="btn" asp-controller="Appointment" asp-action="Create">Book a consultation</a></p>
+    </div>
+
+    <aside class="index" aria-label="Practice areas">
+        <h2>What we handle</h2>
+        <ul>
+            @foreach (var area in Model.Areas)
+            {
+                <li>
+                    <a asp-controller="PracticeAreas" asp-action="Index" asp-fragment="area-@area.Id">
+                        <strong>@area.Name</strong>
+                        <span>@area.Description</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </aside>
+</section>
+
+<section class="section wrap">
+    <div class="section-head">
+        <h2>Our attorneys</h2>
+        <a asp-controller="Lawyers" asp-action="Index">See everyone</a>
+    </div>
+    <div class="people">
+        @foreach (var l in Model.Lawyers)
+        {
+            <a class="person" asp-controller="Lawyers" asp-action="Details" asp-route-id="@l.Id">
+                @if (!string.IsNullOrEmpty(l.PhotoUrl))
+                {
+                    <img class="avatar" src="@l.PhotoUrl" alt="" />
+                }
+                else
+                {
+                    <span class="avatar mono" aria-hidden="true">@TextHelper.Initials(l.FullName)</span>
+                }
+                <span class="person-name">@l.FullName</span>
+                <span class="person-title">@l.Title</span>
+            </a>
+        }
+    </div>
+</section>
+
+<section class="band">
+    <div class="wrap band-inner">
+        <h2>Not sure which attorney you need?</h2>
+        <p>Pick a practice area and a time. We will match you with the right person.</p>
+        <a class="btn btn-light" asp-controller="Appointment" asp-action="Create">Request a consultation</a>
+    </div>
+</section>

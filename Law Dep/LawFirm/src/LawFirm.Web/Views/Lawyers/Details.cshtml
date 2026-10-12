@@ -1,0 +1,36 @@
+@model Lawyer
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<section class="wrap narrow section">
+    <a class="back" asp-action="Index">All attorneys</a>
+
+    <div class="profile">
+        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+        {
+            <img class="avatar avatar-lg" src="@Model.PhotoUrl" alt="Portrait of @Model.FullName" />
+        }
+        else
+        {
+            <span class="avatar avatar-lg mono" aria-hidden="true">@TextHelper.Initials(Model.FullName)</span>
+        }
+        <div>
+            <h1>@Model.FullName</h1>
+            <p class="meta">@Model.Title</p>
+        </div>
+    </div>
+
+    <p class="lead">@Model.Bio</p>
+
+    <h2>Practice areas</h2>
+    <ul class="plain">
+        @foreach (var a in Model.PracticeAreas)
+        {
+            <li>@a.Name</li>
+        }
+    </ul>
+
+    <p><a href="mailto:@Model.Email">@Model.Email</a></p>
+    <p><a class="btn" asp-controller="Appointment" asp-action="Create" asp-route-lawyerId="@Model.Id">Book a consultation with @(Model.FullName.Split(' ')[0])</a></p>
+</section>

@@ -1,0 +1,26 @@
+@model LoginVm
+@{
+    ViewData["Title"] = "Staff sign in";
+}
+
+<section class="wrap narrow section">
+    <h1>Staff sign in</h1>
+
+    <form method="post" class="form form-small" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+        <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+
+        <div class="field">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" type="email" autocomplete="username" />
+            <span asp-validation-for="Email" class="field-error"></span>
+        </div>
+        <div class="field">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" autocomplete="current-password" />
+            <span asp-validation-for="Password" class="field-error"></span>
+        </div>
+        <label class="check"><input asp-for="RememberMe" /> @Html.DisplayNameFor(m => m.RememberMe)</label>
+
+        <button type="submit" class="btn">Sign in</button>
+    </form>
+</section>

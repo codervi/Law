@@ -1,0 +1,71 @@
+@model AppointmentCreateVm
+@{
+    ViewData["Title"] = "Book a consultation";
+}
+
+<section class="wrap narrow section">
+    <h1>Book a consultation</h1>
+    <p class="lead">Consultations last one hour and are held Monday to Friday, 09:00 to 17:00.</p>
+
+    <form method="post" class="form" novalidate>
+        <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+
+        <div class="field">
+            <label asp-for="FullName"></label>
+            <input asp-for="FullName" autocomplete="name" />
+            <span asp-validation-for="FullName" class="field-error"></span>
+        </div>
+
+        <div class="row">
+            <div class="field">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" type="email" autocomplete="email" />
+                <span asp-validation-for="Email" class="field-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Phone">Phone (optional)</label>
+                <input asp-for="Phone" type="tel" autocomplete="tel" />
+                <span asp-validation-for="Phone" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="field">
+                <label asp-for="PracticeAreaId"></label>
+                <select asp-for="PracticeAreaId" asp-items="@(new SelectList(Model.Areas, "Id", "Name"))">
+                    <option value="0">Select an area</option>
+                </select>
+                <span asp-validation-for="PracticeAreaId" class="field-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="LawyerId"></label>
+                <select asp-for="LawyerId" asp-items="@(new SelectList(Model.Lawyers, "Id", "FullName"))">
+                    <option value="">No preference</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="field">
+                <label asp-for="Date"></label>
+                <input asp-for="Date" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="Date" class="field-error"></span>
+            </div>
+            <div class="field">
+                <label asp-for="Time"></label>
+                <select asp-for="Time" data-selected="@Model.Time" disabled>
+                    <option value="">Choose a date first</option>
+                </select>
+                <span asp-validation-for="Time" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label asp-for="Message"></label>
+            <textarea asp-for="Message" rows="5"></textarea>
+            <span asp-validation-for="Message" class="field-error"></span>
+        </div>
+
+        <button type="submit" class="btn">Request consultation</button>
+    </form>
+</section>

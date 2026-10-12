@@ -1,0 +1,77 @@
+@model PagedVm<Appointment>
+@{
+    ViewData["Title"] = "Appointments";
+    var statuses = new[] { "Pending", "Confirmed", "Cancelled" };
+}
+
+<h1>Appointments</h1>
+
+<nav class="filters" aria-label="Filter by status">
+    <a class="@(Model.Status is null ? "active" : "")" asp-action="Index">All</a>
+    @foreach (var s in statuses)
+    {
+        <a class="@(Model.Status == s ? "active" : "")" asp-action="Index" asp-route-status="@s">@s</a>
+    }
+</nav>
+
+@if (!Model.Items.Any())
+{
+    <p class="empty">Nothing here yet.</p>
+}
+else
+{
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>When</th><th>Client</th><th>Area and attorney</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                @foreach (var a in Model.Items)
+                {
+                    <tr>
+                        <td>@a.PreferredDate.ToString("ddd d MMM yyyy, HH:mm")</td>
+                        <td>
+                            @a.FullName<br />
+                            <a href="mailto:@a.Email">@a.Email</a>
+                            @if (!string.IsNullOrEmpty(a.Phone)) { <br /><span class="meta">@a.Phone</span> }
+                            <details>
+                                <summary>Message</summary>
+                                <p>@a.Message</p>
+                            </details>
+                        </td>
+                        <td>@a.PracticeArea?.Name<br /><span class="meta">@(a.Lawyer?.FullName ?? "Not assigned")</span></td>
+                        <td><span class="badge badge-@a.Status.ToString().ToLower()">@a.Status</span></td>
+                        <td class="actions">
+                            <form asp-action="SetStatus" method="post">
+                                <input type="hidden" name="id" value="@a.Id" />
+                                <input type="hidden" name="returnStatus" value="@Model.Status" />
+                                <input type="hidden" name="page" value="@Model.Page" />
+                                @if (a.Status != AppointmentStatus.Confirmed)
+                                {
+                                    <button type="submit" name="status" value="Confirmed" class="btn btn-small">Confirm</button>
+                                }
+                                @if (a.Status != AppointmentStatus.Cancelled)
+                                {
+                                    <button type="submit" name="status" value="Cancelled" class="btn btn-small btn-ghost">Cancel</button>
+                                }
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="pager" aria-label="Pages">
+            @if (Model.Page > 1)
+            {
+                <a asp-action="Index" asp-route-status="@Model.Status" asp-route-page="@(Model.Page - 1)">Previous</a>
+            }
+            <span>Page @Model.Page of @Model.TotalPages</span>
+            @if (Model.Page < Model.TotalPages)
+            {
+                <a asp-action="Index" asp-route-status="@Model.Status" asp-route-page="@(Model.Page + 1)">Next</a>
+            }
+        </nav>
+    }
+}

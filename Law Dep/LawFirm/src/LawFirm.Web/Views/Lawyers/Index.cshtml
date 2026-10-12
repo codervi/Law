@@ -1,0 +1,29 @@
+@model List<Lawyer>
+@{
+    ViewData["Title"] = "Attorneys";
+}
+
+<section class="wrap narrow section">
+    <h1>Attorneys</h1>
+
+    <ul class="roster">
+        @foreach (var l in Model)
+        {
+            <li>
+                @if (!string.IsNullOrEmpty(l.PhotoUrl))
+                {
+                    <img class="avatar" src="@l.PhotoUrl" alt="" />
+                }
+                else
+                {
+                    <span class="avatar mono" aria-hidden="true">@TextHelper.Initials(l.FullName)</span>
+                }
+                <div>
+                    <h2><a asp-action="Details" asp-route-id="@l.Id">@l.FullName</a></h2>
+                    <p class="meta">@l.Title</p>
+                    <p>@string.Join(", ", l.PracticeAreas.Select(a => a.Name))</p>
+                </div>
+            </li>
+        }
+    </ul>
+</section>

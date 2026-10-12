@@ -1,0 +1,28 @@
+@model PracticeArea
+@{
+    var isEdit = Model.Id != 0;
+    ViewData["Title"] = isEdit ? "Edit practice area" : "Add practice area";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post" class="form" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id.ToString() : null)" novalidate>
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+
+    <div class="field">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name" class="field-error"></span>
+    </div>
+    <div class="field">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" rows="4"></textarea>
+        <span asp-validation-for="Description" class="field-error"></span>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn">Save practice area</button>
+        <a class="btn btn-ghost" asp-action="Index">Cancel</a>
+    </div>
+</form>

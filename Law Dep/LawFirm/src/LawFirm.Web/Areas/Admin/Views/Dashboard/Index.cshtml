@@ -1,0 +1,41 @@
+@model List<Appointment>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Dashboard</h1>
+
+<div class="stats">
+    <a class="stat" asp-controller="Appointments" asp-action="Index" asp-route-status="Pending">
+        <span class="stat-n">@ViewBag.Pending</span> awaiting confirmation
+    </a>
+    <div class="stat"><span class="stat-n">@ViewBag.Confirmed</span> confirmed</div>
+    <a class="stat" asp-controller="Lawyers" asp-action="Index"><span class="stat-n">@ViewBag.Lawyers</span> attorneys</a>
+    <a class="stat" asp-controller="PracticeAreas" asp-action="Index"><span class="stat-n">@ViewBag.Areas</span> practice areas</a>
+</div>
+
+<h2>Next appointments</h2>
+@if (!Model.Any())
+{
+    <p class="empty">No upcoming appointments. New requests from the website will show up here.</p>
+}
+else
+{
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>When</th><th>Client</th><th>Area</th><th>Attorney</th><th>Status</th></tr></thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    <tr>
+                        <td>@a.PreferredDate.ToString("ddd d MMM, HH:mm")</td>
+                        <td>@a.FullName</td>
+                        <td>@a.PracticeArea?.Name</td>
+                        <td>@(a.Lawyer?.FullName ?? "Not assigned")</td>
+                        <td><span class="badge badge-@a.Status.ToString().ToLower()">@a.Status</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

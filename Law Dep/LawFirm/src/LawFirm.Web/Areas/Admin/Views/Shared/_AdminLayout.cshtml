@@ -1,0 +1,44 @@
+@{
+    var title = ViewData["Title"] as string;
+    var current = ViewContext.RouteData.Values["controller"]?.ToString();
+    string Active(string c) => current == c ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title | Admin | Calder &amp; Rowe</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="admin">
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="admin-shell">
+        <aside class="sidebar">
+            <a class="brand" asp-area="" asp-controller="Home" asp-action="Index">Calder &amp; Rowe</a>
+            <p class="meta">Admin panel</p>
+            <nav aria-label="Admin">
+                <a class="@Active("Dashboard")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                <a class="@Active("Appointments")" asp-area="Admin" asp-controller="Appointments" asp-action="Index">Appointments</a>
+                <a class="@Active("Lawyers")" asp-area="Admin" asp-controller="Lawyers" asp-action="Index">Attorneys</a>
+                <a class="@Active("PracticeAreas")" asp-area="Admin" asp-controller="PracticeAreas" asp-action="Index">Practice areas</a>
+            </nav>
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="link-button">Sign out</button>
+            </form>
+        </aside>
+
+        <main id="main" class="admin-main">
+            @if (TempData["Success"] is string ok)
+            {
+                <div class="alert alert-ok" role="status">@ok</div>
+            }
+            @if (TempData["Error"] is string err)
+            {
+                <div class="alert alert-error" role="alert">@err</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+@{
+    var title = ViewData["Title"] as string;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@(title is null ? "Calder & Rowe Attorneys" : $"{title} | Calder & Rowe Attorneys")</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+        <div class="wrap bar">
+            <a class="brand" asp-controller="Home" asp-action="Index">Calder &amp; Rowe</a>
+            <nav aria-label="Main">
+                <a asp-controller="PracticeAreas" asp-action="Index">Practice areas</a>
+                <a asp-controller="Lawyers" asp-action="Index">Attorneys</a>
+                <a class="btn btn-small" asp-controller="Appointment" asp-action="Create">Book a consultation</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap bar">
+            <p>Calder &amp; Rowe Attorneys. A fictional firm built as a portfolio project.</p>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin panel</a>
+            }
+            else
+            {
+                <a asp-area="" asp-controller="Account" asp-action="Login">Staff sign in</a>
+            }
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

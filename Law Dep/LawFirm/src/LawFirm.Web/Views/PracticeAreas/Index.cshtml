@@ -1,0 +1,27 @@
+@model List<PracticeArea>
+@{
+    ViewData["Title"] = "Practice areas";
+}
+
+<section class="wrap narrow section">
+    <h1>Practice areas</h1>
+    <p class="lead">Each area is led by attorneys who work in it every day.</p>
+
+    @foreach (var area in Model)
+    {
+        <article class="area" id="area-@area.Id">
+            <h2>@area.Name</h2>
+            <p>@area.Description</p>
+            @if (area.Lawyers.Any())
+            {
+                <p class="meta">
+                    Attorneys:
+                    @foreach (var (l, i) in area.Lawyers.Select((l, i) => (l, i)))
+                    {
+                        <a asp-controller="Lawyers" asp-action="Details" asp-route-id="@l.Id">@l.FullName</a>@(i < area.Lawyers.Count - 1 ? ", " : "")
+                    }
+                </p>
+            }
+        </article>
+    }
+</section>

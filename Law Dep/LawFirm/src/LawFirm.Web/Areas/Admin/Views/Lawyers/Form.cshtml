@@ -1,0 +1,62 @@
+@model LawyerFormVm
+@{
+    var isEdit = Model.Id != 0;
+    ViewData["Title"] = isEdit ? "Edit attorney" : "Add attorney";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post" class="form" asp-action="@(isEdit ? "Edit" : "Create")" asp-route-id="@(isEdit ? Model.Id.ToString() : null)" novalidate>
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="alert alert-error"></div>
+
+    <div class="row">
+        <div class="field">
+            <label asp-for="FullName"></label>
+            <input asp-for="FullName" />
+            <span asp-validation-for="FullName" class="field-error"></span>
+        </div>
+        <div class="field">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" />
+            <span asp-validation-for="Title" class="field-error"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" type="email" />
+            <span asp-validation-for="Email" class="field-error"></span>
+        </div>
+        <div class="field">
+            <label asp-for="PhotoUrl">Photo URL (optional)</label>
+            <input asp-for="PhotoUrl" />
+            <span asp-validation-for="PhotoUrl" class="field-error"></span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label asp-for="Bio"></label>
+        <textarea asp-for="Bio" rows="5"></textarea>
+        <span asp-validation-for="Bio" class="field-error"></span>
+    </div>
+
+    <fieldset class="field">
+        <legend>Practice areas</legend>
+        <div class="checks">
+            @foreach (var area in Model.AllAreas)
+            {
+                <label class="check">
+                    <input type="checkbox" name="SelectedAreaIds" value="@area.Id" checked="@Model.SelectedAreaIds.Contains(area.Id)" />
+                    @area.Name
+                </label>
+            }
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <button type="submit" class="btn">Save attorney</button>
+        <a class="btn btn-ghost" asp-action="Index">Cancel</a>
+    </div>
+</form>

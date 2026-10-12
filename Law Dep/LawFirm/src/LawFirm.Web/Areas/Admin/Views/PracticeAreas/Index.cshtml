@@ -1,0 +1,38 @@
+@model List<PracticeArea>
+@{
+    ViewData["Title"] = "Practice areas";
+}
+
+<div class="page-head">
+    <h1>Practice areas</h1>
+    <a class="btn" asp-action="Create">Add practice area</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="empty">No practice areas yet. Add one so visitors can pick it when booking.</p>
+}
+else
+{
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Name</th><th>Description</th><th>Attorneys</th><th>Actions</th></tr></thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    <tr>
+                        <td>@a.Name</td>
+                        <td>@a.Description</td>
+                        <td>@a.Lawyers.Count</td>
+                        <td class="actions">
+                            <a class="btn btn-small btn-ghost" asp-action="Edit" asp-route-id="@a.Id">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@a.Id" method="post" data-confirm="Delete the practice area &quot;@a.Name&quot;?">
+                                <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
